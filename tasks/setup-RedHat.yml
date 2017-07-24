@@ -1,0 +1,16 @@
+---
+
+# Install EPEL repo onto the system
+- name: install Centos EPEL repo on the server
+  yum: pkg=epel-release state=installed
+  tags: EPEL_repo
+
+# Install Nginx on server
+- name: install nginx on server
+  yum: pkg=nginx state=installed
+  tags: nginx_installation_redhat
+
+# Restart and Enable Nginx service
+- name: start nginx service
+  service: name=nginx state=started enabled=yes
+  tags: nginx_enable

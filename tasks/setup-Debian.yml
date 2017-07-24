@@ -1,0 +1,29 @@
+---
+
+# Checking if Nginx is already installed 
+- name: check whether nginx is already installed 
+  shell: which nginx
+  register: nginx_task_installed
+  changed_when: nginx_task_installed.rc != 0
+  failed_when: no
+  tags: nginx_pre_check
+
+# update system before installation
+- name: update the system before installation
+  become: true
+  apt:
+   update_cache: yes
+   cache_valid_time: 886600
+  tags: cache_update
+
+# Install Nginx on the server
+- name: install nginx on to the system
+  become: true
+  apt: name=nginx state=present
+  tags: nginx_installation_debian
+
+# Update-rc.d to run nginx on boot
+- name: make sure that nginx run as server boots up
+  become: true
+  shell: "update-rc.d nginx defaults"
+  tags: nginx_update

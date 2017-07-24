@@ -1,0 +1,33 @@
+---
+#tasks for nginx setup
+
+
+# Include variables on the basis of Operating System
+- name: Include OS-specific variables.
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags: include_variables
+
+# Define Nginx User
+- name: Define nginx_user.
+  set_fact:
+    nginx_user: "{{ __nginx_user }}"
+  when: nginx_user is not defined
+  tags: nginx_user
+
+# Running Task for Debian Platform   
+- include: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+  tags: task_debian
+
+# Running Task for Redhat Platform
+- include: setup-RedHat.yml
+  when: ansible_os_family == 'RedHat'
+  tags: task_redhat
+
+# Include Virtual Host Configuration
+- include: virt_host.yml
+  tags: virtual_host_configuration
+
+# Include Configuration File
+- include: configuration.yml
+  tags: conf_file_setup
