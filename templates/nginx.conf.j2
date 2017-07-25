@@ -1,81 +1,90 @@
-user  {{ nginx_user }};
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
 
-error_log  {{ nginx_error_log }};
-pid        {{ nginx_pidfile }};
+user nginx;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
 
-{% block worker %}
-worker_processes  {{ nginx_worker_processes }};
-{% endblock %}
+# Load dynamic modules. See /usr/share/nginx/README.dynamic.
+include /usr/share/nginx/modules/*.conf;
 
-{% if nginx_extra_conf_options %}
-{{ nginx_extra_conf_options }}
-{% endif %}
-
-{% block events %}
 events {
-    worker_connections  {{ nginx_worker_connections }};
-    multi_accept {{ nginx_multi_accept }};
+    worker_connections 1024;
 }
-{% endblock %}
 
 http {
-    {% block http_begin %}{% endblock %}
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
 
-{% block http_basic %}
-    include       {{ nginx_mime_file_path }};
-    default_type  application/octet-stream;
+    access_log  /var/log/nginx/access.log  main;
 
-    server_names_hash_bucket_size {{ nginx_server_names_hash_bucket_size }};
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
 
-    client_max_body_size {{ nginx_client_max_body_size }};
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
 
-    log_format  main  {{ nginx_log_format|indent(23) }};
+    # Load modular configuration files from the /etc/nginx/conf.d directory.
+    # See http://nginx.org/en/docs/ngx_core_module.html#include
+    # for more information.
+    include /etc/nginx/conf.d/*.conf;
 
-    access_log  {{ nginx_access_log }};
+    server {
+        listen       80 default_server;
+        listen       [::]:80 default_server;
+        server_name  _;
+        root         /usr/share/nginx/html;
 
-    sendfile        {{ nginx_sendfile }};
-    tcp_nopush      {{ nginx_tcp_nopush }};
-    tcp_nodelay     {{ nginx_tcp_nodelay }};
+        # Load configuration files for the default server block.
+        include /etc/nginx/default.d/*.conf;
 
-    keepalive_timeout  {{ nginx_keepalive_timeout }};
-    keepalive_requests {{ nginx_keepalive_requests }};
+        location / {
+        }
 
-    server_tokens {{ nginx_server_tokens }};
-{% if nginx_proxy_cache_path %}
-    proxy_cache_path {{ nginx_proxy_cache_path }};
-{% endif %}
-{% endblock %}
+        error_page 404 /404.html;
+            location = /40x.html {
+        }
 
-{% block http_gzip %}
-    # gzip on;
-{% endblock %}
-
-{% if nginx_extra_http_options %}
-    {{ nginx_extra_http_options|indent(4, False) }}
-{% endif %}
-
-{% block http_upstream %}
-{% for upstream in nginx_upstreams %}
-    upstream {{ upstream.name }} {
-{% if upstream.strategy is defined %}
-        {{ upstream.strategy }};
-{% endif %}
-{% for server in upstream.servers %}
-        server {{ server }};
-{% endfor %}
-{% if upstream.keepalive is defined %}
-        keepalive {{ upstream.keepalive }};
-{% endif %}
+        error_page 500 502 503 504 /50x.html;
+            location = /50x.html {
+        }
     }
-{% endfor %}
-{% endblock %}
 
-{% block http_includes %}
-    include {{ nginx_conf_path }}/*.conf;
-{% if nginx_conf_path != nginx_vhost_path %}
-    include {{ nginx_vhost_path }}/*;
-{% endif %}
-{% endblock %}
+# Settings for a TLS enabled server.
+#
+#    server {
+#        listen       443 ssl http2 default_server;
+#        listen       [::]:443 ssl http2 default_server;
+#        server_name  _;
+#        root         /usr/share/nginx/html;
+#
+#        ssl_certificate "/etc/pki/nginx/server.crt";
+#        ssl_certificate_key "/etc/pki/nginx/private/server.key";
+#        ssl_session_cache shared:SSL:1m;
+#        ssl_session_timeout  10m;
+#        ssl_ciphers HIGH:!aNULL:!MD5;
+#        ssl_prefer_server_ciphers on;
+#
+#        # Load configuration files for the default server block.
+#        include /etc/nginx/default.d/*.conf;
+#
+#        location / {
+#        }
+#
+#        error_page 404 /404.html;
+#            location = /40x.html {
+#        }
+#
+#        error_page 500 502 503 504 /50x.html;
+#            location = /50x.html {
+#        }
+#    }
 
-    {% block http_end %}{% endblock %}
 }
+

@@ -27,3 +27,4 @@
   become: true
   shell: "update-rc.d nginx defaults"
   tags: nginx_update
+

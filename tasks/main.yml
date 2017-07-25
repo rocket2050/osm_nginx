@@ -24,10 +24,6 @@
   when: ansible_os_family == 'RedHat'
   tags: task_redhat
 
-# Include Virtual Host Configuration
-- include: virt_host.yml
-  tags: virtual_host_configuration
-
 # Include Configuration File
 - include: configuration.yml
   tags: conf_file_setup

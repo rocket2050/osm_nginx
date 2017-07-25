@@ -1,15 +1,11 @@
 ---
 
-# handling nginx 
-
-# restart nginx as asked in tasks
-#- name: restart nginx
-#  service: name=nginx state=restarted enabled=yes
-#  nginx: nginx_restart
+# handling nginx
 
 #reload nginx as asked in tasks
 - name: reload nginx
   service: name=nginx state=reloaded
+  become: true
   tags: nginx_reload
 
 # check whether nginx configuration is working good
