@@ -2,4 +2,4 @@
 - hosts: {{ hosts }}
 
   roles: 
-    - role: Nginx
+    - role: nginx
