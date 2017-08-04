@@ -1,14 +1,14 @@
 # osm_nginx
 
-Role Name
+# Role Name : osm_nginx
 
 A brief description of the role goes here.
 
-Requirements
+# Requirements
 
 None
 
-Role Variables
+# Role Variables
 
 Available variables are [variables](https://github.com/opstree-ansible/osm_nginx/blob/master/defaults/main.yml)
 
