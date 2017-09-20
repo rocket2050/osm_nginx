@@ -2,4 +2,4 @@
 - hosts: "{{ host }}"
 
   roles: 
-    - role: nginx
+    - role: osm_nginx

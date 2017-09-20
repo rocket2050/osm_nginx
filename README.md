@@ -1,35 +1,48 @@
-# osm_nginx
+Role Name
+=========
 
-# Role Name : osm_nginx
+Role to install Nginx on Ubuntu/CentOS.
 
-A brief description of the role goes here.
-
-# Requirements
-
+Requirements
+------------
 None
-
-# Role Variables
-
-Available variables are [variables](https://github.com/opstree-ansible/osm_nginx/blob/master/defaults/main.yml)
+Role Variables
+--------------
 
 
-# Dependencies
 
-None.
+variables in vars/main.yml-> Debian.yml & RedHat.yml
 
-# Example Playbook
 
-Including an example of how to use role.
 
-```
+Example Playbook
+----------------
 
-- hosts: "{{ host }}"
-  roles:
-     - { role: osm_nginx }
- ```
- 
-# License
+Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+
+    - hosts: centos or ubuntu
+      roles:
+         - { role: osm_nginx }
+         
+How to run the Playbook
+-----------------------
+
+- For CentOS
+
+ansible-playbook -i hosts(your host file) site.yml 
+
+- For Ubuntu
+
+ansible-playbook -i hosts(your host file) site.yml 
+
+License
+-------
 
 BSD
 
 Author Information
+------------------
+
+http://opstree.com
+
+
