@@ -33,6 +33,6 @@ suites:
   - name: default
     verifier:
       patterns:
-        - roles/osm_elasticsearch/test/integration/default/serverspec/nginx_spec.rb
+        - roles/osm_nginx/test/integration/default/serverspec/nginx_spec.rb
       bundler_path: '/usr/local/bin'
       rspec_path: '/usr/local/bin'
