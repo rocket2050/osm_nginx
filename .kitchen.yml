@@ -1,0 +1,38 @@
+---
+driver:
+  name: docker
+
+provisioner:
+  name: ansible_playbook
+  hosts: test-kitchen
+  require_chef_for_busser: false
+
+
+platforms:
+  - name: ubuntu-14
+    driver_config:
+            image: geerlingguy/docker-ubuntu1404-ansible
+            platform: ubuntu
+  - name: centos-6
+    driver_config:
+            image: guyton/centos6
+            platform: centos
+  - name: ubuntu-16
+    driver_config:
+            image: geerlingguy/docker-ubuntu1604-ansible
+            platform: ubuntu
+  - name: centos-7
+    driver_config:
+            image: ansible/centos7-ansible
+            platform: centos
+  
+verifier:
+  name: serverspec
+
+suites:
+  - name: default
+    verifier:
+      patterns:
+        - roles/osm_elasticsearch/test/integration/default/serverspec/nginx_spec.rb
+      bundler_path: '/usr/local/bin'
+      rspec_path: '/usr/local/bin'
