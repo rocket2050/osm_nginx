@@ -1,0 +1,4 @@
+---
+- hosts: test-kitchen
+    - osm_nginx
+
