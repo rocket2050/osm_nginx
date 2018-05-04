@@ -13,17 +13,6 @@
   - reload nginx
   tags: nginx_configuration_file
 
-# nginx configuration
-- name: copy nginx configuration file
-  template:
-    src: "{{ nginx_conf_template }}"
-    dest: "{{ nginx_conf_path }}"
-    owner: root
-    group: "{{ root_group }}"
-    mode: 0775
-  become: true
-  notify:
-  - reload nginx
 
 # Start and Enable Nginx to startup on Boot.
 - name: ensure nginx is started and enabled to start at boot
