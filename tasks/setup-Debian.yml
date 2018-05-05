@@ -22,6 +22,12 @@
   apt: name=nginx state=present
   tags: nginx_installation_debian
 
+- name: Add the user 'nginx' 
+  user:
+    name: nginx
+    comment: nginx
+    group: nginx
+
 # Update-rc.d to run nginx on boot
 - name: make sure that nginx run as server boots up
   become: true
