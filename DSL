@@ -1,0 +1,26 @@
+job("Nginx") {
+	description()
+	keepDependencies(false)
+	disabled(false)
+	concurrentBuild(false)
+	steps {
+		shell("""cd /etc/ansible/roles
+sudo ansible-playbook php.yml""")
+	}
+}
+
+listView("Nginx DSl") {
+	jobs {
+		name("Nginx")
+	}
+	columns {
+		status()
+		weather()
+		name()
+		lastSuccess()
+		lastFailure()
+		lastDuration()
+		buildButton()
+	}
+}
+
