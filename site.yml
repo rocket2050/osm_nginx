@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ host }}"
-
+- hosts: localhost
+  become_user: root
   roles: 
-    - role: nginx
+    - role: osm_nginx
