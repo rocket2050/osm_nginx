@@ -1,5 +1,5 @@
 ---
-- hosts: "{{ host }}"
+- hosts: localhost
 
   roles: 
     - osm_nginx
